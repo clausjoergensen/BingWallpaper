@@ -2,4 +2,4 @@
 
 Bing Wallpaper for Mac
 
-![screenshot.png]
+![](screenshot.png)
