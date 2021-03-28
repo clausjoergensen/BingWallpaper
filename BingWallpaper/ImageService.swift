@@ -3,7 +3,7 @@ import Combine
 
 struct ImageService {
     func getTodayImage(at index: Int = 0) -> AnyPublisher<Image?, Never> {
-        let url = URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&idx=\(index)&n=1&mkt=en-US")!
+        let url = URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&idx=\(index)&n=1&mkt=sv-SE")!
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: ImagesResult.self, decoder: JSONDecoder())
