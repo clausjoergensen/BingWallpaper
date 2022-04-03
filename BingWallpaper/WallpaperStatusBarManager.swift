@@ -4,7 +4,9 @@ import Combine
 final class WallpaperStatusBarManager {
     private let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private var cancellables = Set<AnyCancellable>()
-    private let wallpaperManager = WallpaperManager()
+    private let wallpaperManager: WallpaperManager
+    private let workspace: NSWorkspace
+    private let application: NSApplication
 
     private lazy var copyrightMenuItem = NSMenuItem(title: "")
 
@@ -52,7 +54,15 @@ final class WallpaperStatusBarManager {
         return menu
     }()
 
-    init() {
+    init(
+        wallpaperManager: WallpaperManager = WallpaperManager(),
+        workspace: NSWorkspace = NSWorkspace.shared,
+        application: NSApplication = NSApplication.shared
+    ) {
+        self.wallpaperManager = wallpaperManager
+        self.workspace = workspace
+        self.application = application
+
         statusBarItem.button?.title = Strings.title
         statusBarItem.button?.image = .icon
         statusBarItem.button?.action = #selector(openImage)
@@ -99,12 +109,12 @@ final class WallpaperStatusBarManager {
     @objc
     private func openImage() {
         guard let url = wallpaperManager.image?.copyrightlink else { return }
-        NSWorkspace.shared.open(url)
+        workspace.open(url)
     }
 
     @objc
     private func quit() {
-        NSApplication.shared.terminate(self)
+        application.terminate(self)
     }
 
     private func updateImageMenuActions(index: Int) {
