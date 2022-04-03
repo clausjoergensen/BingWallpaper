@@ -2,7 +2,7 @@ import Cocoa
 import Combine
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+final class AppDelegate: NSObject, NSApplicationDelegate {
     private let maximumNumberOfImages = 7
     private let statusBar = NSStatusBar.system
     private let statusBarMenu = NSMenu(title: "Bing Wallpaper")
@@ -14,8 +14,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private var imageIndex = 0 {
         didSet {
-            previousImageMenuItem.action = imageIndex >= 0 && imageIndex < maximumNumberOfImages ? #selector(previousImage) : nil
-            nextImageMenuItem.action = imageIndex > 0 ? #selector(nextImage) : nil
+            previousImageMenuItem.action = imageIndex >= 0 && imageIndex < maximumNumberOfImages
+                ? #selector(previousImage)
+                : nil
+
+            nextImageMenuItem.action = imageIndex > 0
+                ? #selector(nextImage)
+                : nil
         }
     }
 
@@ -51,6 +56,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    private var fileURL: URL? {
+        didSet {
+            guard oldValue != fileURL else { return }
+            setDesktopImageURL()
+        }
+    }
+
+    private var screens: [NSScreen] = NSScreen.screens {
+        didSet {
+            guard oldValue != screens else { return }
+            setDesktopImageURL()
+        }
+    }
+
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         statusBarMenu.addItem(titleMenuItem)
         statusBarMenu.addItem(copyrightMenuItem)
@@ -73,6 +92,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         refresh()
         startTimer()
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(didChangeScreen),
+            name: NSApplication.didChangeScreenParametersNotification,
+            object: nil
+        )
     }
 
     private func startTimer() {
@@ -89,21 +115,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         RunLoop.main.add(timer, forMode: .common)
     }
 
-    private func loadImage() {
-        cancellable = imageService.getTodayImage(at: imageIndex)
-            .sink { [weak self] image in
-                self?.image = image
+    private func loadImage() async throws {
+        let image = try await imageService.getTodayImage(at: imageIndex)
+        self.image = image
 
-                if let image = image {
-                    self?.downloadAndSetWallpaper(image: image)
-                }
-            }
+        if let image = image {
+            self.fileURL = try await downloadAndSetWallpaper(image: image)
+        }
     }
 
     @objc
     private func loadNewestImage() {
-        imageIndex = 0
-        loadImage()
+        Task {
+            imageIndex = 0
+            try await loadImage()
+        }
     }
 
     @objc
@@ -115,22 +141,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc
     private func nextImage() {
         guard imageIndex > 0 else { return }
-        imageIndex = imageIndex - 1
-        loadImage()
+        Task {
+            imageIndex = imageIndex - 1
+            try await loadImage()
+        }
     }
 
     @objc
     private func previousImage() {
         guard imageIndex < maximumNumberOfImages else { return }
-        imageIndex = imageIndex + 1
-        loadImage()
+        Task {
+            imageIndex = imageIndex + 1
+            try await loadImage()
+        }
     }
 
     @objc
     private func refresh() {
-        imageIndex = 0
-        loadImage()
-        lastRefresh = Date()
+        Task {
+            imageIndex = 0
+            try await loadImage()
+            lastRefresh = Date()
+        }
     }
 
     @objc
@@ -138,34 +170,51 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApplication.shared.terminate(self)
     }
 
-    private func downloadAndSetWallpaper(image: Image) {
-        let url = URL(string: "https://www.bing.com\(image.url)")!
+    @objc
+    private func didChangeScreen(_ notification: NSNotification) {
+        screens = NSScreen.screens
+    }
+
+    private func setDesktopImageURL() {
+        guard let fileURL = fileURL else {
+            return
+        }
+
+        do {
+            try NSScreen.screens.forEach { screen in
+                try NSWorkspace.shared.setDesktopImageURL(fileURL, for: screen, options: [:])
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+
+    @discardableResult
+    private func downloadAndSetWallpaper(image: Image) async throws -> URL {
         let fileName = String(image.urlbase.dropFirst(7))
 
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
-            .replaceError(with: nil)
-            .sink { data in
-                guard let data = data else { return }
-                do {
-                    let url = try FileManager.default.url(for: .picturesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let (data, _) = try await URLSession.shared.data(from: URL(string: "https://www.bing.com\(image.url)")!)
+        let url = try FileManager.default.url(
+            for: .picturesDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        )
 
-                    let bingURL = url.appendingPathComponent("Bing")
-                    if !FileManager.default.fileExists(atPath: bingURL.path) {
-                        try FileManager.default.createDirectory(at: bingURL, withIntermediateDirectories: false, attributes: nil)
-                    }
+        let bingURL = url.appendingPathComponent("Bing")
+        if !FileManager.default.fileExists(atPath: bingURL.path) {
+            try FileManager.default.createDirectory(
+                at: bingURL,
+                withIntermediateDirectories: false,
+                attributes: nil
+            )
+        }
 
-                    let fileURL = bingURL.appendingPathComponent("\(fileName).jpg")
-                    if !FileManager.default.fileExists(atPath: fileURL.path) {
-                        try data.write(to: fileURL)
-                    }
+        let fileURL = bingURL.appendingPathComponent("\(fileName).jpg")
+        if !FileManager.default.fileExists(atPath: fileURL.path) {
+            try data.write(to: fileURL)
+        }
 
-                    try NSScreen.screens.forEach { screen in
-                        try NSWorkspace.shared.setDesktopImageURL(fileURL, for: screen, options: [:])
-                    }
-                } catch let error {
-                    print(error.localizedDescription)
-                }
-            }
+        return fileURL
     }
 }
