@@ -75,20 +75,42 @@ final class WallpaperManager {
 
     func nextImage() async throws {
         guard imageIndex > 0 else { return }
+
         imageIndex = imageIndex - 1
-        try await loadImage()
+
+        do {
+            try await loadImage()
+        } catch {
+            imageIndex = imageIndex + 1
+            throw error
+        }
     }
 
     func previousImage() async throws {
         guard imageIndex < WallpaperManager.maximumNumberOfImages else { return }
+
         imageIndex = imageIndex + 1
-        try await loadImage()
+
+        do {
+            try await loadImage()
+        } catch {
+            imageIndex = imageIndex - 1
+            throw error
+        }
     }
 
     func refresh() async throws {
+        let oldImageIndex = imageIndex
+
         imageIndex = 0
-        try await loadImage()
-        lastRefresh = Date()
+
+        do {
+            try await loadImage()
+            lastRefresh = Date()
+        } catch {
+            imageIndex = oldImageIndex
+            throw error
+        }
     }
 
     private func setDesktopImageURL() {
