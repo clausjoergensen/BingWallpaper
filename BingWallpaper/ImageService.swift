@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 protocol ImageServiceType {
     func getTodayImage(at index: Int) async throws -> Image?
