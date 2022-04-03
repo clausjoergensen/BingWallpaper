@@ -21,7 +21,7 @@ struct ImageService: ImageServiceType {
     }
 }
 
-struct Image: Decodable {
+struct Image: Decodable, Equatable {
     var copyright: String
     var title: String
     var url: String

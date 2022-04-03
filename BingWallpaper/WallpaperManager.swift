@@ -64,11 +64,12 @@ final class WallpaperManager {
     }
 
     private func loadImage() async throws {
-        let image = try await imageService.getTodayImage(at: imageIndex)
-        self.image = image
+        let newImage = try await imageService.getTodayImage(at: imageIndex)
+        let oldImage = self.image
+        self.image = newImage
 
-        if let image = image {
-            self.fileURL = try await download(image: image)
+        if let newImage = newImage, newImage != oldImage {
+            self.fileURL = try await download(image: newImage)
         }
     }
 
@@ -110,12 +111,6 @@ final class WallpaperManager {
 
     @discardableResult
     private func download(image: Image) async throws -> URL {
-        guard let downloadURL = URL(string: "https://www.bing.com\(image.url)") else {
-            throw ImageDownloadError.invalidURL
-        }
-
-        let (data, _) = try await URLSession.shared.data(from: downloadURL)
-
         let picturesDirectoryURL = try FileManager.default.url(
             for: .picturesDirectory,
             in: .userDomainMask,
@@ -135,9 +130,16 @@ final class WallpaperManager {
         let fileName = String(image.urlbase.dropFirst(7))
         let fileURL = bingURL.appendingPathComponent("\(fileName).jpg")
 
-        if !FileManager.default.fileExists(atPath: fileURL.path) {
-            try data.write(to: fileURL)
+        guard !FileManager.default.fileExists(atPath: fileURL.path) else {
+            return fileURL
         }
+
+        guard let downloadURL = URL(string: "https://www.bing.com\(image.url)") else {
+            throw ImageDownloadError.invalidURL
+        }
+
+        let (data, _) = try await URLSession.shared.data(from: downloadURL)
+        try data.write(to: fileURL)
 
         return fileURL
     }
