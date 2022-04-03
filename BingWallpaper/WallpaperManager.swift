@@ -28,8 +28,8 @@ final class WallpaperManager {
     private(set) var image: Image?
 
     init(
-        imageService: ImageServiceType = ImageService(),
-        notificationCenter: NotificationCenter = NotificationCenter.default
+        imageService: ImageServiceType,
+        notificationCenter: NotificationCenter
     ) {
         self.imageService = imageService
 

@@ -55,9 +55,9 @@ final class WallpaperStatusBarManager {
     }()
 
     init(
-        wallpaperManager: WallpaperManager = WallpaperManager(),
-        workspace: NSWorkspace = NSWorkspace.shared,
-        application: NSApplication = NSApplication.shared
+        wallpaperManager: WallpaperManager,
+        workspace: NSWorkspace,
+        application: NSApplication
     ) {
         self.wallpaperManager = wallpaperManager
         self.workspace = workspace

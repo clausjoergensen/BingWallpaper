@@ -5,9 +5,11 @@ protocol ImageServiceType {
 }
 
 struct ImageService: ImageServiceType {
+    let urlSession: URLSession
+
     func getTodayImage(at index: Int) async throws -> Image? {
         let url = URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&idx=\(index)&n=1&mkt=sv-SE")!
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, _) = try await urlSession.data(from: url)
 
         struct ImagesResult: Decodable {
             var images: [Image]
