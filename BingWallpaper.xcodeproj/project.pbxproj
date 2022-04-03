@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */; };
+		BCE57ECE27F9BCD1002D9400 /* WallpaperStatusBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */; };
+		BCE57ED027F9C0A1002D9400 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECF27F9C0A1002D9400 /* Images.swift */; };
+		BCE57ED227F9C0C1002D9400 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ED127F9C0C1002D9400 /* Strings.swift */; };
 		E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D652A4253F986900DFE595 /* AppDelegate.swift */; };
 		E5D652A9253F986A00DFE595 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5D652A8253F986A00DFE595 /* Assets.xcassets */; };
 		E5D652B6253F98B800DFE595 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D652B5253F98B800DFE595 /* ImageService.swift */; };
@@ -17,6 +20,9 @@
 
 /* Begin PBXFileReference section */
 		BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
+		BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStatusBarManager.swift; sourceTree = "<group>"; };
+		BCE57ECF27F9C0A1002D9400 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		BCE57ED127F9C0C1002D9400 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		E5D652A1253F986900DFE595 /* Bing Wallpaper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bing Wallpaper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5D652A4253F986900DFE595 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E5D652A8253F986A00DFE595 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -65,6 +71,9 @@
 				E5D652B5253F98B800DFE595 /* ImageService.swift */,
 				E5FD7EBA253FB0DB0007E192 /* TimeInterval+Extensions.swift */,
 				BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */,
+				BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */,
+				BCE57ECF27F9C0A1002D9400 /* Images.swift */,
+				BCE57ED127F9C0C1002D9400 /* Strings.swift */,
 			);
 			path = BingWallpaper;
 			sourceTree = "<group>";
@@ -141,7 +150,10 @@
 				BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */,
 				E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */,
 				E5FD7EBB253FB0DB0007E192 /* TimeInterval+Extensions.swift in Sources */,
+				BCE57ECE27F9BCD1002D9400 /* WallpaperStatusBarManager.swift in Sources */,
+				BCE57ED027F9C0A1002D9400 /* Images.swift in Sources */,
 				E5D652B6253F98B800DFE595 /* ImageService.swift in Sources */,
+				BCE57ED227F9C0C1002D9400 /* Strings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
