@@ -65,18 +65,18 @@
 		E5D652A3253F986900DFE595 /* BingWallpaper */ = {
 			isa = PBXGroup;
 			children = (
-				E5FD7EB3253FA3190007E192 /* Main.storyboard */,
-				E5D652A4253F986900DFE595 /* AppDelegate.swift */,
-				E5D652A8253F986A00DFE595 /* Assets.xcassets */,
-				E5D652AD253F986A00DFE595 /* Info.plist */,
 				E5D652AE253F986A00DFE595 /* BingWallpaper.entitlements */,
+				E5D652AD253F986A00DFE595 /* Info.plist */,
+				E5D652A4253F986900DFE595 /* AppDelegate.swift */,
+				BCE57ECF27F9C0A1002D9400 /* Images.swift */,
 				E5D652B5253F98B800DFE595 /* ImageService.swift */,
+				BCE57ED327F9C633002D9400 /* Logging.swift */,
+				BCE57ED127F9C0C1002D9400 /* Strings.swift */,
 				E5FD7EBA253FB0DB0007E192 /* TimeInterval+Extensions.swift */,
 				BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */,
 				BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */,
-				BCE57ECF27F9C0A1002D9400 /* Images.swift */,
-				BCE57ED127F9C0C1002D9400 /* Strings.swift */,
-				BCE57ED327F9C633002D9400 /* Logging.swift */,
+				E5D652A8253F986A00DFE595 /* Assets.xcassets */,
+				E5FD7EB3253FA3190007E192 /* Main.storyboard */,
 			);
 			path = BingWallpaper;
 			sourceTree = "<group>";
