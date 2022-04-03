@@ -62,20 +62,11 @@ final class WallpaperStatusBarManager {
         previousImageMenuItem.isEnabled = false
 
         wallpaperManager.$imageIndex.sink { [weak self] imageIndex in
-            guard let self = self else { return }
-            self.previousImageMenuItem.action = imageIndex >= 0 && imageIndex < WallpaperManager.maximumNumberOfImages
-                ? #selector(self.previousImage)
-                : nil
-            self.nextImageMenuItem.action = imageIndex > 0
-                ? #selector(self.nextImage)
-                : nil
+            self?.updateImageMenuActions(index: imageIndex)
         }.store(in: &cancellables)
 
         wallpaperManager.$image.sink { [weak self] image in
-            guard let self = self else { return }
-            guard let split = image?.copyright.components(separatedBy: " (©"), split.count == 2 else { return }
-            self.titleMenuItem.title = split[0]
-            self.copyrightMenuItem.title = "©\(split[1].dropLast())"
+            self?.updateTitleAndCopyright(image: image)
         }.store(in: &cancellables)
     }
 
@@ -114,6 +105,29 @@ final class WallpaperStatusBarManager {
     @objc
     private func quit() {
         NSApplication.shared.terminate(self)
+    }
+
+    private func updateImageMenuActions(index: Int) {
+        if index >= 0 && index < WallpaperManager.maximumNumberOfImages {
+            previousImageMenuItem.action = #selector(previousImage)
+        } else {
+            previousImageMenuItem.action = nil
+        }
+
+        if index > 0 {
+            nextImageMenuItem.action = #selector(nextImage)
+        } else {
+            nextImageMenuItem.action = nil
+        }
+    }
+
+    private func updateTitleAndCopyright(image: Image?) {
+        guard let split = image?.copyright.components(separatedBy: " (©"), split.count == 2 else {
+            return
+        }
+
+        titleMenuItem.title = split[0]
+        copyrightMenuItem.title = "©\(split[1].dropLast())"
     }
 }
 
