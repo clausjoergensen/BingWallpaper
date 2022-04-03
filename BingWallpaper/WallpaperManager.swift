@@ -100,7 +100,7 @@ final class WallpaperManager {
                 try NSWorkspace.shared.setDesktopImageURL(fileURL, for: screen, options: [:])
             }
         } catch {
-            print(error.localizedDescription)
+            Logger.error(error.localizedDescription)
         }
     }
 

@@ -1,7 +1,10 @@
 import Cocoa
 import Combine
+import os
 
 final class WallpaperStatusBarManager {
+    private static let log = OSLog(subsystem: "com.clajun.BingWallpaper", category: "Logging")
+
     private let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private var cancellables = Set<AnyCancellable>()
     private let wallpaperManager: WallpaperManager
@@ -66,28 +69,44 @@ final class WallpaperStatusBarManager {
         setupStatusBarAndMenuItems()
 
         Task {
-            try await wallpaperManager.start()
+            do {
+                try await wallpaperManager.start()
+            } catch {
+                Logger.error(error.localizedDescription)
+            }
         }
     }
 
     @objc
     private func nextImage() {
         Task {
-            try await wallpaperManager.nextImage()
+            do {
+                try await wallpaperManager.nextImage()
+            } catch {
+                Logger.error(error.localizedDescription)
+            }
         }
     }
 
     @objc
     private func previousImage() {
         Task {
-            try await wallpaperManager.previousImage()
+            do {
+                try await wallpaperManager.previousImage()
+            } catch {
+                Logger.error(error.localizedDescription)
+            }
         }
     }
 
     @objc
     private func refresh() {
         Task {
-            try await wallpaperManager.refresh()
+            do {
+                try await wallpaperManager.refresh()
+            } catch {
+                Logger.error(error.localizedDescription)
+            }
         }
     }
 
