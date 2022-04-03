@@ -1,8 +1,12 @@
 import Foundation
 import Combine
 
-struct ImageService {
-    func getTodayImage(at index: Int = 0) async throws -> Image? {
+protocol ImageServiceType {
+    func getTodayImage(at index: Int) async throws -> Image?
+}
+
+struct ImageService: ImageServiceType {
+    func getTodayImage(at index: Int) async throws -> Image? {
         let url = URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&idx=\(index)&n=1&mkt=sv-SE")!
         let (data, _) = try await URLSession.shared.data(from: url)
         let result = try JSONDecoder().decode(ImagesResult.self, from: data)

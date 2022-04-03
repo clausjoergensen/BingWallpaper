@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */; };
 		E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D652A4253F986900DFE595 /* AppDelegate.swift */; };
 		E5D652A9253F986A00DFE595 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E5D652A8253F986A00DFE595 /* Assets.xcassets */; };
 		E5D652B6253F98B800DFE595 /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D652B5253F98B800DFE595 /* ImageService.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		E5D652A1253F986900DFE595 /* Bing Wallpaper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bing Wallpaper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E5D652A4253F986900DFE595 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E5D652A8253F986A00DFE595 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				E5D652AE253F986A00DFE595 /* BingWallpaper.entitlements */,
 				E5D652B5253F98B800DFE595 /* ImageService.swift */,
 				E5FD7EBA253FB0DB0007E192 /* TimeInterval+Extensions.swift */,
+				BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */,
 			);
 			path = BingWallpaper;
 			sourceTree = "<group>";
@@ -93,7 +96,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1200;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					E5D652A0253F986900DFE595 = {
 						CreatedOnToolsVersion = 12.0.1;
@@ -135,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */,
 				E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */,
 				E5FD7EBB253FB0DB0007E192 /* TimeInterval+Extensions.swift in Sources */,
 				E5D652B6253F98B800DFE595 /* ImageService.swift in Sources */,
@@ -276,6 +280,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BingWallpaper/BingWallpaper.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7642JV7JR2;
@@ -298,6 +303,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BingWallpaper/BingWallpaper.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 7642JV7JR2;
