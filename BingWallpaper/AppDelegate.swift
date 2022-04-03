@@ -13,10 +13,4 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         workspace: .shared,
         application: .shared
     )
-
-    func applicationDidFinishLaunching(_ aNotification: Notification) {
-        Task {
-            try await wallpaperStatusBarManager.start()
-        }
-    }
 }

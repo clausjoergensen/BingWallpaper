@@ -64,11 +64,10 @@ final class WallpaperStatusBarManager {
         self.application = application
 
         setupStatusBarAndMenuItems()
-    }
 
-    @MainActor
-    func start() async throws {
-        try await wallpaperManager.start()
+        Task {
+            try await wallpaperManager.start()
+        }
     }
 
     @objc
