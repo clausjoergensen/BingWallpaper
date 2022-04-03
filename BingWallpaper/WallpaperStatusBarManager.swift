@@ -63,21 +63,7 @@ final class WallpaperStatusBarManager {
         self.workspace = workspace
         self.application = application
 
-        statusBarItem.button?.title = Strings.title
-        statusBarItem.button?.image = .icon
-        statusBarItem.button?.action = #selector(openImage)
-        statusBarItem.menu = statusBarMenu
-
-        nextImageMenuItem.isEnabled = false
-        previousImageMenuItem.isEnabled = false
-
-        wallpaperManager.$imageIndex.sink { [weak self] imageIndex in
-            self?.updateImageMenuActions(index: imageIndex)
-        }.store(in: &cancellables)
-
-        wallpaperManager.$image.sink { [weak self] image in
-            self?.updateTitleAndCopyright(image: image)
-        }.store(in: &cancellables)
+        setupStatusBarAndMenuItems()
     }
 
     @MainActor
@@ -115,6 +101,24 @@ final class WallpaperStatusBarManager {
     @objc
     private func quit() {
         application.terminate(self)
+    }
+
+    private func setupStatusBarAndMenuItems() {
+        statusBarItem.button?.title = Strings.title
+        statusBarItem.button?.image = .icon
+        statusBarItem.button?.action = #selector(openImage)
+        statusBarItem.menu = statusBarMenu
+
+        nextImageMenuItem.isEnabled = false
+        previousImageMenuItem.isEnabled = false
+
+        wallpaperManager.$imageIndex.sink { [weak self] imageIndex in
+            self?.updateImageMenuActions(index: imageIndex)
+        }.store(in: &cancellables)
+
+        wallpaperManager.$image.sink { [weak self] image in
+            self?.updateTitleAndCopyright(image: image)
+        }.store(in: &cancellables)
     }
 
     private func updateImageMenuActions(index: Int) {
