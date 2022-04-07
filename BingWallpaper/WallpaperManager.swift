@@ -43,8 +43,11 @@ final class WallpaperManager {
     }
 
     func start() async throws {
+        defer {
+            startTimer()
+        }
+
         try await refresh()
-        startTimer()
     }
 
     private func startTimer() {

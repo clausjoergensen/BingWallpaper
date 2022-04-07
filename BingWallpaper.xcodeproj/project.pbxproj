@@ -307,7 +307,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clajun.BingWallpaper;
 				PRODUCT_NAME = "Bing Wallpaper";
 				SWIFT_VERSION = 5.0;
@@ -331,7 +331,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clajun.BingWallpaper;
 				PRODUCT_NAME = "Bing Wallpaper";
 				SWIFT_VERSION = 5.0;
