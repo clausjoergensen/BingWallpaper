@@ -7,13 +7,6 @@ final class WallpaperManager {
     private var timer: Timer?
     private var lastRefresh = Date()
 
-    private var fileURL: URL? {
-        didSet {
-            guard oldValue != fileURL else { return }
-            setDesktopImageURL()
-        }
-    }
-
     private var screens: [NSScreen] = NSScreen.screens {
         didSet {
             guard oldValue != screens else { return }
@@ -21,11 +14,18 @@ final class WallpaperManager {
         }
     }
 
-    @Published
-    private(set) var imageIndex = 0
+    struct State {
+        let index: Int
+        let image: Image
+        let fileURL: URL
+    }
 
     @Published
-    private(set) var image: Image?
+    private(set) var state: State? {
+        didSet {
+            setDesktopImageURL()
+        }
+    }
 
     init(
         imageService: ImageServiceType,
@@ -43,13 +43,12 @@ final class WallpaperManager {
     }
 
     func start() async throws {
-        defer {
-            startTimer()
-        }
+        await startTimer()
 
         try await refresh()
     }
 
+    @MainActor
     private func startTimer() {
         let timer = Timer(timeInterval: .hours(1), repeats: true) { [weak self] _ in
             guard let self = self else { return }
@@ -66,58 +65,33 @@ final class WallpaperManager {
         RunLoop.main.add(timer, forMode: .common)
     }
 
-    private func loadImage() async throws {
-        let newImage = try await imageService.getTodayImage(at: imageIndex)
-        let oldImage = self.image
-        self.image = newImage
+    private func loadImage(at index: Int) async throws {
+        guard let newImage = try await imageService.getTodayImage(at: index), state?.image != newImage else { return }
 
-        if let newImage = newImage, newImage != oldImage {
-            self.fileURL = try await download(image: newImage)
-        }
+        state = State(
+            index: index,
+            image: newImage,
+            fileURL: try await download(image: newImage)
+        )
     }
 
     func nextImage() async throws {
-        guard imageIndex > 0 else { return }
-
-        imageIndex = imageIndex - 1
-
-        do {
-            try await loadImage()
-        } catch {
-            imageIndex = imageIndex + 1
-            throw error
-        }
+        guard let imageIndex = state?.index, imageIndex > 0 else { return }
+        try await loadImage(at: imageIndex - 1)
     }
 
     func previousImage() async throws {
-        guard imageIndex < WallpaperManager.maximumNumberOfImages else { return }
-
-        imageIndex = imageIndex + 1
-
-        do {
-            try await loadImage()
-        } catch {
-            imageIndex = imageIndex - 1
-            throw error
-        }
+        guard let imageIndex = state?.index, imageIndex < WallpaperManager.maximumNumberOfImages else { return }
+        try await loadImage(at: imageIndex + 1)
     }
 
     func refresh() async throws {
-        let oldImageIndex = imageIndex
-
-        imageIndex = 0
-
-        do {
-            try await loadImage()
-            lastRefresh = Date()
-        } catch {
-            imageIndex = oldImageIndex
-            throw error
-        }
+        try await loadImage(at: 0)
+        lastRefresh = Date()
     }
 
     private func setDesktopImageURL() {
-        guard let fileURL = fileURL else {
+        guard let fileURL = state?.fileURL else {
             return
         }
 

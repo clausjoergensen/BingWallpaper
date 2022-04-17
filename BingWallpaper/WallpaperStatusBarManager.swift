@@ -112,7 +112,7 @@ final class WallpaperStatusBarManager {
 
     @objc
     private func openImage() {
-        guard let url = wallpaperManager.image?.copyrightlink else { return }
+        guard let url = wallpaperManager.state?.image.copyrightlink else { return }
         workspace.open(url)
     }
 
@@ -130,12 +130,10 @@ final class WallpaperStatusBarManager {
         nextImageMenuItem.isEnabled = false
         previousImageMenuItem.isEnabled = false
 
-        wallpaperManager.$imageIndex.sink { [weak self] imageIndex in
-            self?.updateImageMenuActions(index: imageIndex)
-        }.store(in: &cancellables)
-
-        wallpaperManager.$image.sink { [weak self] image in
-            self?.updateTitleAndCopyright(image: image)
+        wallpaperManager.$state.sink { [weak self] state in
+            guard let self = self, let state = state else { return }
+            self.updateImageMenuActions(index: state.index)
+            self.updateTitleAndCopyright(image: state.image)
         }.store(in: &cancellables)
     }
 
