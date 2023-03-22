@@ -5,7 +5,7 @@ import os
 final class WallpaperStatusBarManager {
     private static let log = OSLog(subsystem: "com.clajun.BingWallpaper", category: "Logging")
 
-    private let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    private let statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private var cancellables = Set<AnyCancellable>()
     private let wallpaperManager: WallpaperManager
     private let workspace: NSWorkspace

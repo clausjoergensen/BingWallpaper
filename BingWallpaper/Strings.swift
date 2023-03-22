@@ -1,5 +1,5 @@
 enum Strings {
-    static let title = "Bing Wallpaper"
+    static let title = ""
 
     enum Menu {
         static let next = "Next Wallpaper"
