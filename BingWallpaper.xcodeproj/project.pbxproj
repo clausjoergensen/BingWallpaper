@@ -3,13 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC380CCD2CB2B65900D70DD9 /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC380CCC2CB2B65500D70DD9 /* Task+Extensions.swift */; };
+		BC380CCF2CB2B66A00D70DD9 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC380CCE2CB2B66900D70DD9 /* Channel.swift */; };
+		BC380CD12CB2B68900D70DD9 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC380CD02CB2B68600D70DD9 /* Publisher+Extensions.swift */; };
 		BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */; };
 		BCE57ECE27F9BCD1002D9400 /* WallpaperStatusBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */; };
-		BCE57ED027F9C0A1002D9400 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ECF27F9C0A1002D9400 /* Images.swift */; };
 		BCE57ED227F9C0C1002D9400 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ED127F9C0C1002D9400 /* Strings.swift */; };
 		BCE57ED427F9C633002D9400 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCE57ED327F9C633002D9400 /* Logging.swift */; };
 		E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5D652A4253F986900DFE595 /* AppDelegate.swift */; };
@@ -20,9 +22,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC380CCC2CB2B65500D70DD9 /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
+		BC380CCE2CB2B66900D70DD9 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		BC380CD02CB2B68600D70DD9 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
+		BC380CD52CB2BCA400D70DD9 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperManager.swift; sourceTree = "<group>"; };
 		BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WallpaperStatusBarManager.swift; sourceTree = "<group>"; };
-		BCE57ECF27F9C0A1002D9400 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		BCE57ED127F9C0C1002D9400 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		BCE57ED327F9C633002D9400 /* Logging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
 		E5D652A1253F986900DFE595 /* Bing Wallpaper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bing Wallpaper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,14 +73,17 @@
 				E5D652AE253F986A00DFE595 /* BingWallpaper.entitlements */,
 				E5D652AD253F986A00DFE595 /* Info.plist */,
 				E5D652A4253F986900DFE595 /* AppDelegate.swift */,
-				BCE57ECF27F9C0A1002D9400 /* Images.swift */,
+				BC380CCE2CB2B66900D70DD9 /* Channel.swift */,
 				E5D652B5253F98B800DFE595 /* ImageService.swift */,
 				BCE57ED327F9C633002D9400 /* Logging.swift */,
+				BC380CD02CB2B68600D70DD9 /* Publisher+Extensions.swift */,
 				BCE57ED127F9C0C1002D9400 /* Strings.swift */,
+				BC380CCC2CB2B65500D70DD9 /* Task+Extensions.swift */,
 				E5FD7EBA253FB0DB0007E192 /* TimeInterval+Extensions.swift */,
 				BCE57ECB27F9B767002D9400 /* WallpaperManager.swift */,
 				BCE57ECD27F9BCD1002D9400 /* WallpaperStatusBarManager.swift */,
 				E5D652A8253F986A00DFE595 /* Assets.xcassets */,
+				BC380CD52CB2BCA400D70DD9 /* .swiftlint.yml */,
 				E5FD7EB3253FA3190007E192 /* Main.storyboard */,
 			);
 			path = BingWallpaper;
@@ -95,6 +103,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BC380CD42CB2BC5400D70DD9 /* PBXTargetDependency */,
 			);
 			name = BingDesktop;
 			productName = BingDesktop;
@@ -107,8 +116,9 @@
 		E5D65299253F986900DFE595 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1200;
-				LastUpgradeCheck = 1330;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					E5D652A0253F986900DFE595 = {
 						CreatedOnToolsVersion = 12.0.1;
@@ -124,6 +134,9 @@
 				Base,
 			);
 			mainGroup = E5D65298253F986900DFE595;
+			packageReferences = (
+				BC380CD22CB2BC3200D70DD9 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			productRefGroup = E5D652A2253F986900DFE595 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -151,10 +164,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */,
+				BC380CCF2CB2B66A00D70DD9 /* Channel.swift in Sources */,
+				BC380CCD2CB2B65900D70DD9 /* Task+Extensions.swift in Sources */,
 				E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */,
+				BC380CD12CB2B68900D70DD9 /* Publisher+Extensions.swift in Sources */,
 				E5FD7EBB253FB0DB0007E192 /* TimeInterval+Extensions.swift in Sources */,
 				BCE57ECE27F9BCD1002D9400 /* WallpaperStatusBarManager.swift in Sources */,
-				BCE57ED027F9C0A1002D9400 /* Images.swift in Sources */,
 				E5D652B6253F98B800DFE595 /* ImageService.swift in Sources */,
 				BCE57ED227F9C0C1002D9400 /* Strings.swift in Sources */,
 				BCE57ED427F9C633002D9400 /* Logging.swift in Sources */,
@@ -162,6 +177,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BC380CD42CB2BC5400D70DD9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = BC380CD32CB2BC5400D70DD9 /* SwiftLintBuildToolPlugin */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		E5FD7EB3253FA3190007E192 /* Main.storyboard */ = {
@@ -209,9 +231,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -270,9 +294,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -294,11 +320,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BingWallpaper/BingWallpaper.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7642JV7JR2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = BingWallpaper/Info.plist;
@@ -310,7 +338,7 @@
 				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clajun.BingWallpaper;
 				PRODUCT_NAME = "Bing Wallpaper";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -318,11 +346,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = BingWallpaper/BingWallpaper.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 7642JV7JR2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = BingWallpaper/Info.plist;
@@ -334,7 +364,7 @@
 				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clajun.BingWallpaper;
 				PRODUCT_NAME = "Bing Wallpaper";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
 		};
@@ -360,6 +390,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BC380CD22CB2BC3200D70DD9 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.57.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BC380CD32CB2BC5400D70DD9 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BC380CD22CB2BC3200D70DD9 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E5D65299253F986900DFE595 /* Project object */;
 }

@@ -1,3 +1,5 @@
+// Copyright © 2024 Claus Jørgensen. All rights reserved.
+
 enum Strings {
     static let title = ""
 

@@ -1,0 +1,18 @@
+opt_in_rules:
+  - discouraged_assert
+  - empty_count
+  - first_where
+  - empty_string
+  - toggle_bool
+  - convenience_type
+  - overridden_super_call
+  - shorthand_optional_binding
+  - unneeded_parentheses_in_closure_argument
+  - accessibility_label_for_image
+  - accessibility_trait_for_button
+  - array_init
+  - attributes
+  - closure_end_indentation
+  - collection_alignment
+  - yoda_condition
+  - direct_return

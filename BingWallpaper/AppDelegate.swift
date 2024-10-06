@@ -1,9 +1,11 @@
+// Copyright © 2024 Claus Jørgensen. All rights reserved.
+
 import Cocoa
 import Combine
 
-@NSApplicationMain
+@main
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private let wallpaperStatusBarManager = WallpaperStatusBarManager(
+    @MainActor private let wallpaperStatusBarManager = WallpaperStatusBarManager(
         wallpaperManager: WallpaperManager(
             imageService: ImageService(
                 urlSession: .shared

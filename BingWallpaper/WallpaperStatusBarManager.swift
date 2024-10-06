@@ -1,3 +1,5 @@
+// Copyright © 2024 Claus Jørgensen. All rights reserved.
+
 import Cocoa
 import Combine
 import os
@@ -57,6 +59,7 @@ final class WallpaperStatusBarManager {
         return menu
     }()
 
+    @MainActor
     init(
         wallpaperManager: WallpaperManager,
         workspace: NSWorkspace,
@@ -79,7 +82,7 @@ final class WallpaperStatusBarManager {
 
     @objc
     private func nextImage() {
-        Task {
+        Task { [wallpaperManager] in
             do {
                 try await wallpaperManager.nextImage()
             } catch {
@@ -90,7 +93,7 @@ final class WallpaperStatusBarManager {
 
     @objc
     private func previousImage() {
-        Task {
+        Task { [wallpaperManager] in
             do {
                 try await wallpaperManager.previousImage()
             } catch {
@@ -101,7 +104,7 @@ final class WallpaperStatusBarManager {
 
     @objc
     private func refresh() {
-        Task {
+        Task { [wallpaperManager] in
             do {
                 try await wallpaperManager.refresh()
             } catch {
@@ -117,10 +120,12 @@ final class WallpaperStatusBarManager {
     }
 
     @objc
+    @MainActor
     private func quit() {
         application.terminate(self)
     }
 
+    @MainActor
     private func setupStatusBarAndMenuItems() {
         statusBarItem.button?.title = Strings.title
         statusBarItem.button?.image = .icon
@@ -130,11 +135,14 @@ final class WallpaperStatusBarManager {
         nextImageMenuItem.isEnabled = false
         previousImageMenuItem.isEnabled = false
 
-        wallpaperManager.$state.sink { [weak self] state in
-            guard let self = self, let state = state else { return }
-            self.updateImageMenuActions(index: state.index)
-            self.updateTitleAndCopyright(image: state.image)
-        }.store(in: &cancellables)
+        wallpaperManager.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                guard let self, let state else { return }
+                updateImageMenuActions(index: state.index)
+                updateTitleAndCopyright(image: state.image)
+            }
+            .store(in: &cancellables)
     }
 
     private func updateImageMenuActions(index: Int) {

@@ -1,16 +1,19 @@
-import Cocoa
+// Copyright © 2024 Claus Jørgensen. All rights reserved.
 
-final class WallpaperManager {
+import Cocoa
+import Combine
+
+final class WallpaperManager: @unchecked Sendable {
     static let maximumNumberOfImages = 7
 
     private let imageService: ImageServiceType
-    private var timer: Timer?
+    private var cancellables = Set<AnyCancellable>()
     private var lastRefresh = Date()
 
     private var screens: [NSScreen] = NSScreen.screens {
         didSet {
             guard oldValue != screens else { return }
-            setDesktopImageURL()
+            setDesktopImageURL(screens: screens)
         }
     }
 
@@ -20,10 +23,9 @@ final class WallpaperManager {
         let fileURL: URL
     }
 
-    @Published
-    private(set) var state: State? {
+    @Published private(set) var state: State? {
         didSet {
-            setDesktopImageURL()
+            setDesktopImageURL(screens: screens)
         }
     }
 
@@ -33,36 +35,30 @@ final class WallpaperManager {
     ) {
         self.imageService = imageService
 
-        notificationCenter.addObserver(
-            forName: NSApplication.didChangeScreenParametersNotification,
-            object: nil,
-            queue: nil
-        ) { [weak self] _ in
-            self?.screens = NSScreen.screens
-        }
+        notificationCenter
+            .publisher(for: NSApplication.didChangeScreenParametersNotification)
+            .sink { [weak self] _ in
+                self?.screens = NSScreen.screens
+            }
+            .store(in: &cancellables)
     }
 
     func start() async throws {
-        await startTimer()
+        startTimer()
 
         try await refresh()
     }
 
-    @MainActor
     private func startTimer() {
-        let timer = Timer(timeInterval: .hours(1), repeats: true) { [weak self] _ in
-            guard let self = self else { return }
-
-            if !Calendar.current.isDateInToday(self.lastRefresh) {
-                Task {
-                    try await self.refresh()
+        Timer
+            .publish(every: .hours(1), on: .main, in: .common)
+            .task { [weak self] _ in
+                guard let self else { return }
+                if !Calendar.current.isDateInToday(self.lastRefresh) {
+                    try? await self.refresh()
                 }
             }
-        }
-
-        self.timer = timer
-
-        RunLoop.main.add(timer, forMode: .common)
+            .store(in: &cancellables)
     }
 
     private func loadImage(at index: Int) async throws {
@@ -76,13 +72,13 @@ final class WallpaperManager {
     }
 
     func nextImage() async throws {
-        guard let imageIndex = state?.index, imageIndex > 0 else { return }
-        try await loadImage(at: imageIndex - 1)
+        guard let imageIndex = state?.index else { return }
+        try await loadImage(at: max(0, imageIndex - 1))
     }
 
     func previousImage() async throws {
-        guard let imageIndex = state?.index, imageIndex < WallpaperManager.maximumNumberOfImages else { return }
-        try await loadImage(at: imageIndex + 1)
+        guard let imageIndex = state?.index else { return }
+        try await loadImage(at: min(WallpaperManager.maximumNumberOfImages, imageIndex + 1))
     }
 
     func refresh() async throws {
@@ -90,13 +86,13 @@ final class WallpaperManager {
         lastRefresh = Date()
     }
 
-    private func setDesktopImageURL() {
+    private func setDesktopImageURL(screens: [NSScreen]) {
         guard let fileURL = state?.fileURL else {
             return
         }
 
         do {
-            try NSScreen.screens.forEach { screen in
+            try screens.forEach { screen in
                 try NSWorkspace.shared.setDesktopImageURL(fileURL, for: screen, options: [:])
             }
         } catch {

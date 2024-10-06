@@ -1,3 +1,5 @@
+// Copyright © 2024 Claus Jørgensen. All rights reserved.
+
 import Foundation
 
 public extension TimeInterval {

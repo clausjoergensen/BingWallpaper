@@ -1,6 +1,8 @@
+// Copyright © 2024 Claus Jørgensen. All rights reserved.
+
 import Foundation
 
-protocol ImageServiceType {
+protocol ImageServiceType: Sendable {
     func getTodayImage(at index: Int) async throws -> Image?
 }
 
