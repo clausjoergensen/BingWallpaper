@@ -52,6 +52,7 @@ final class WallpaperManager: @unchecked Sendable {
     private func startTimer() {
         Timer
             .publish(every: .hours(1), on: .main, in: .common)
+            .autoconnect()
             .task { [weak self] _ in
                 guard let self else { return }
                 if !Calendar.current.isDateInToday(self.lastRefresh) {
