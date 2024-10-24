@@ -106,7 +106,7 @@ final class WallpaperStatusBarManager {
     private func refresh() {
         Task { [wallpaperManager] in
             do {
-                try await wallpaperManager.refresh()
+                try await wallpaperManager.refresh(force: true)
             } catch {
                 Logger.error(error.localizedDescription)
             }

@@ -17,7 +17,11 @@ struct ImageService: ImageServiceType {
             var images: [Image]
         }
 
-        let result = try JSONDecoder().decode(ImagesResult.self, from: data)
+        let decoder = JSONDecoder()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        decoder.dateDecodingStrategy = .formatted(dateFormatter)
+        let result = try decoder.decode(ImagesResult.self, from: data)
 
         return result.images.first
     }
@@ -29,4 +33,16 @@ struct Image: Decodable, Equatable {
     var url: String
     var urlbase: String
     var copyrightlink: URL
+    let startDate: Date
+    let endDate: Date
+
+    enum CodingKeys: String, CodingKey {
+        case copyright
+        case title
+        case url
+        case urlbase
+        case copyrightlink
+        case startDate = "startdate"
+        case endDate = "enddate"
+    }
 }

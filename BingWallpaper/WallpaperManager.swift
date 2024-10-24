@@ -8,7 +8,7 @@ final class WallpaperManager: @unchecked Sendable {
 
     private let imageService: ImageServiceType
     private var cancellables = Set<AnyCancellable>()
-    private var lastRefresh = Date()
+    private var lastRefresh: Date?
 
     private var screens: [NSScreen] = NSScreen.screens {
         didSet {
@@ -45,8 +45,7 @@ final class WallpaperManager: @unchecked Sendable {
 
     func start() async throws {
         startTimer()
-
-        try await refresh()
+        try await refresh(force: true)
     }
 
     private func startTimer() {
@@ -55,15 +54,13 @@ final class WallpaperManager: @unchecked Sendable {
             .autoconnect()
             .task { [weak self] _ in
                 guard let self else { return }
-                if !Calendar.current.isDateInToday(self.lastRefresh) {
-                    try? await self.refresh()
-                }
+                try? await refresh()
             }
             .store(in: &cancellables)
     }
 
     private func loadImage(at index: Int) async throws {
-        guard let newImage = try await imageService.getTodayImage(at: index), state?.image != newImage else { return }
+        guard let newImage = try await imageService.getTodayImage(at: index) else { return }
 
         state = State(
             index: index,
@@ -82,8 +79,17 @@ final class WallpaperManager: @unchecked Sendable {
         try await loadImage(at: min(WallpaperManager.maximumNumberOfImages, imageIndex + 1))
     }
 
-    func refresh() async throws {
-        try await loadImage(at: 0)
+    func refresh(force: Bool = false) async throws {
+        if force {
+            try await loadImage(at: 0)
+        } else if let image = state?.image, let lastRefresh {
+            if image.endDate.addingTimeInterval(.hours(7)) > lastRefresh {
+                try await loadImage(at: 0)
+            }
+        } else {
+            try await loadImage(at: 0)
+        }
+
         lastRefresh = Date()
     }
 
