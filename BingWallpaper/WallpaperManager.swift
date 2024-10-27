@@ -44,8 +44,9 @@ final class WallpaperManager: @unchecked Sendable {
     }
 
     func start() async throws {
+        Logger.info("Started Bing Wallpaper")
         startTimer()
-        try await refresh(force: true)
+        try await refresh()
     }
 
     private func startTimer() {
@@ -60,7 +61,10 @@ final class WallpaperManager: @unchecked Sendable {
     }
 
     private func loadImage(at index: Int) async throws {
-        guard let newImage = try await imageService.getTodayImage(at: index) else { return }
+        guard let newImage = try await imageService.getTodayImage(at: index) else {
+            Logger.info("Image at index \(index) is the same as the current image.")
+            return
+        }
 
         state = State(
             index: index,
@@ -81,12 +85,16 @@ final class WallpaperManager: @unchecked Sendable {
 
     func refresh(force: Bool = false) async throws {
         if force {
+            Logger.info("Refreshing image (forced)")
             try await loadImage(at: 0)
         } else if let image = state?.image, let lastRefresh {
-            if image.endDate.addingTimeInterval(.hours(7)) > lastRefresh {
+            let imageExpiration = image.endDate.addingTimeInterval(.hours(7))
+            if lastRefresh > imageExpiration {
+                Logger.info("Refreshing image. Last refresh was at \(lastRefresh), image expires at \(imageExpiration)")
                 try await loadImage(at: 0)
             }
         } else {
+            Logger.info("Refreshing image (initial)")
             try await loadImage(at: 0)
         }
 

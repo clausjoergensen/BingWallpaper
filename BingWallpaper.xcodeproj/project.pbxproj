@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BC305C482CCE7055002C8033 /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC305C472CCE7053002C8033 /* Bundle+Extensions.swift */; };
 		BC380CCD2CB2B65900D70DD9 /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC380CCC2CB2B65500D70DD9 /* Task+Extensions.swift */; };
 		BC380CCF2CB2B66A00D70DD9 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC380CCE2CB2B66900D70DD9 /* Channel.swift */; };
 		BC380CD12CB2B68900D70DD9 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC380CD02CB2B68600D70DD9 /* Publisher+Extensions.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BC305C472CCE7053002C8033 /* Bundle+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+Extensions.swift"; sourceTree = "<group>"; };
 		BC380CCC2CB2B65500D70DD9 /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		BC380CCE2CB2B66900D70DD9 /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		BC380CD02CB2B68600D70DD9 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 		E5D652A3253F986900DFE595 /* BingWallpaper */ = {
 			isa = PBXGroup;
 			children = (
+				BC305C472CCE7053002C8033 /* Bundle+Extensions.swift */,
 				E5D652AE253F986A00DFE595 /* BingWallpaper.entitlements */,
 				E5D652AD253F986A00DFE595 /* Info.plist */,
 				E5D652A4253F986900DFE595 /* AppDelegate.swift */,
@@ -165,6 +168,7 @@
 			files = (
 				BCE57ECC27F9B767002D9400 /* WallpaperManager.swift in Sources */,
 				BC380CCF2CB2B66A00D70DD9 /* Channel.swift in Sources */,
+				BC305C482CCE7055002C8033 /* Bundle+Extensions.swift in Sources */,
 				BC380CCD2CB2B65900D70DD9 /* Task+Extensions.swift in Sources */,
 				E5D652A5253F986900DFE595 /* AppDelegate.swift in Sources */,
 				BC380CD12CB2B68900D70DD9 /* Publisher+Extensions.swift in Sources */,
@@ -330,12 +334,13 @@
 				DEVELOPMENT_TEAM = 7642JV7JR2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = BingWallpaper/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clajun.BingWallpaper;
 				PRODUCT_NAME = "Bing Wallpaper";
 				SWIFT_VERSION = 6.0;
@@ -356,12 +361,13 @@
 				DEVELOPMENT_TEAM = 7642JV7JR2;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = BingWallpaper/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 3.1;
+				MARKETING_VERSION = 3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.clajun.BingWallpaper;
 				PRODUCT_NAME = "Bing Wallpaper";
 				SWIFT_VERSION = 6.0;
