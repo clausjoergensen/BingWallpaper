@@ -4,7 +4,9 @@ import Foundation
 
 // swiftlint:disable:next convenience_type
 struct Logger {
+#if DEBUG
     nonisolated(unsafe) private static var destination = FileDestination()
+#endif
 
     static func debug(_ message: String) {
         log("[DEBUG]", message)
@@ -20,7 +22,9 @@ struct Logger {
 
     private static func log(_ category: String, _ message: String) {
         print("[\(Date())]", category, message)
+#if DEBUG
         print("[\(Date())]", category, message, to: &destination)
+#endif
     }
 }
 
