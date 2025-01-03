@@ -115,7 +115,7 @@ final class WallpaperStatusBarManager {
 
     @objc
     private func openImage() {
-        guard let url = wallpaperManager.state?.image.copyrightlink else { return }
+        guard let url = wallpaperManager.state?.currentImage.copyrightlink else { return }
         workspace.open(url)
     }
 
@@ -140,7 +140,7 @@ final class WallpaperStatusBarManager {
             .sink { [weak self] state in
                 guard let self, let state else { return }
                 updateImageMenuActions(index: state.index)
-                updateTitleAndCopyright(image: state.image)
+                updateTitleAndCopyright(image: state.currentImage)
             }
             .store(in: &cancellables)
     }

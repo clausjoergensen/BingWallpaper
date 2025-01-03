@@ -7,10 +7,18 @@ protocol ImageServiceType: Sendable {
 }
 
 struct ImageService: ImageServiceType {
+    private let baseURL = URL(string: "https://www.bing.com/HPImageArchive.aspx")!
+
     let urlSession: URLSession
 
     func getTodayImage(at index: Int) async throws -> Image? {
-        let url = URL(string: "https://www.bing.com/HPImageArchive.aspx?format=js&idx=\(index)&n=1&mkt=sv-SE")!
+        let url = baseURL.appending(queryItems: [
+            URLQueryItem(name: "format", value: "js"),
+            URLQueryItem(name: "idx", value: "\(index)"),
+            URLQueryItem(name: "n", value: "1"),
+            URLQueryItem(name: "mkmt", value: Locale.current.identifier)
+        ])
+
         let (data, _) = try await urlSession.data(from: url)
 
         struct ImagesResult: Decodable {

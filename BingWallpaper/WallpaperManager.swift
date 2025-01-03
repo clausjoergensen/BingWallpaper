@@ -19,8 +19,10 @@ final class WallpaperManager: @unchecked Sendable {
 
     struct State {
         let index: Int
-        let image: Image
-        let fileURL: URL
+        let todayImage: Image
+        let todayImageFileURL: URL
+        let currentImage: Image
+        let currentImageFileURL: URL
     }
 
     @Published private(set) var state: State? {
@@ -60,16 +62,50 @@ final class WallpaperManager: @unchecked Sendable {
             .store(in: &cancellables)
     }
 
+    private func loadTodayImage() async throws {
+        guard let newImage = try await imageService.getTodayImage(at: 0) else {
+            Logger.info("Image at index 0 (today) is the same as the current image.")
+            return
+        }
+
+        let fileURL = try await download(image: newImage)
+
+        state = State(
+            index: 0,
+            todayImage: newImage,
+            todayImageFileURL: fileURL,
+            currentImage: newImage,
+            currentImageFileURL: fileURL
+        )
+    }
+
     private func loadImage(at index: Int) async throws {
+        guard let state else { return }
+
+        guard index != 0 else {
+            self.state = State(
+                index: index,
+                todayImage: state.todayImage,
+                todayImageFileURL: state.todayImageFileURL,
+                currentImage: state.todayImage,
+                currentImageFileURL: state.todayImageFileURL
+            )
+            return
+        }
+
         guard let newImage = try await imageService.getTodayImage(at: index) else {
             Logger.info("Image at index \(index) is the same as the current image.")
             return
         }
 
-        state = State(
+        let newImageFileURL = try await download(image: newImage)
+
+        self.state = State(
             index: index,
-            image: newImage,
-            fileURL: try await download(image: newImage)
+            todayImage: state.todayImage,
+            todayImageFileURL: state.todayImageFileURL,
+            currentImage: newImage,
+            currentImageFileURL: newImageFileURL
         )
     }
 
@@ -85,24 +121,24 @@ final class WallpaperManager: @unchecked Sendable {
 
     func refresh(force: Bool = false) async throws {
         if force {
-            Logger.info("Refreshing image (forced)")
-            try await loadImage(at: 0)
-        } else if let image = state?.image, let lastRefresh {
-            let imageExpiration = image.endDate.addingTimeInterval(.hours(7))
+            Logger.info("Refreshing image to today's image (forced)")
+            try await loadTodayImage()
+        } else if let todayImage = state?.todayImage, let lastRefresh {
+            let imageExpiration = todayImage.endDate.addingTimeInterval(.hours(7))
             if lastRefresh > imageExpiration {
-                Logger.info("Refreshing image. Last refresh was at \(lastRefresh), image expires at \(imageExpiration)")
-                try await loadImage(at: 0)
+                Logger.info("Refreshing image. Last refresh was at \(lastRefresh), today's image expires at \(imageExpiration)")
+                try await loadTodayImage()
             }
         } else {
-            Logger.info("Refreshing image (initial)")
-            try await loadImage(at: 0)
+            Logger.info("Refreshing image to today's image (initial)")
+            try await loadTodayImage()
         }
 
         lastRefresh = Date()
     }
 
     private func setDesktopImageURL(screens: [NSScreen]) {
-        guard let fileURL = state?.fileURL else {
+        guard let fileURL = state?.currentImageFileURL else {
             return
         }
 
@@ -144,12 +180,23 @@ final class WallpaperManager: @unchecked Sendable {
             return fileURL
         }
 
-        guard let downloadURL = URL(string: "https://www.bing.com\(image.url)") else {
-            throw ImageDownloadError.invalidURL
-        }
+        do {
+            let highResolutionImageURL = image.url.replacingOccurrences(of: "_1920x1080", with: "_UHD")
+            guard let downloadURL = URL(string: "https://www.bing.com\(highResolutionImageURL)") else {
+                throw ImageDownloadError.invalidURL
+            }
 
-        let (data, _) = try await URLSession.shared.data(from: downloadURL)
-        try data.write(to: fileURL)
+            let (data, _) = try await URLSession.shared.data(from: downloadURL)
+            try data.write(to: fileURL)
+        } catch {
+            // If we fail to download the UHD image, fallback to the default resolution (1920x1080)
+            guard let downloadURL = URL(string: "https://www.bing.com\(image.url)") else {
+                throw ImageDownloadError.invalidURL
+            }
+
+            let (data, _) = try await URLSession.shared.data(from: downloadURL)
+            try data.write(to: fileURL)
+        }
 
         return fileURL
     }
